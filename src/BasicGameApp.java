@@ -42,12 +42,17 @@ public class BasicGameApp implements Runnable {
 	public Image background;
 	public Image sleighPic;
 	public Image dasherPic;
+	public Image sadChildPic;
+	public Image happyChildPic;
+	public boolean HasCrashed = false;
 
 	//Declare the objects used in the program
 	//These are things that are made up of more than one variable type
 	private Christmas Santa;
 	private Christmas Sleigh;
 	private Christmas Dasher;
+	private Christmas sadChild;
+	private Christmas happyChild;
 
 
 
@@ -77,6 +82,16 @@ public class BasicGameApp implements Runnable {
 
 		dasherPic = Toolkit.getDefaultToolkit().getImage("Dasher.png"); //load the picture
 		Dasher = new Christmas((int)(Math.random())*940,(int)(Math.random()*700));
+		Dasher.isAlive = false;
+
+		sadChildPic = Toolkit.getDefaultToolkit().getImage("sadchild.PNG"); //load the picture
+		sadChild = new Christmas((int)(Math.random())*940,(int)(Math.random()*700));
+
+		happyChildPic = Toolkit.getDefaultToolkit().getImage("happychild.PNG"); //load the picture
+		happyChild = new Christmas((int)(Math.random())*940,(int)(Math.random()*700));
+
+
+
 
 		background = Toolkit.getDefaultToolkit().getImage("night sky stars.jpg"); //load the picture
 
@@ -109,23 +124,27 @@ public class BasicGameApp implements Runnable {
 		Santa.wrap();
 		Sleigh.bounce();
 		Dasher.bounce();
-		Dasher.isAlive = false;
+		sadChild.wrap();
 		if(Santa.rec.intersects(Sleigh.rec) && Santa.isCrashing == false){
 			System.out.println("Crash");
 			Sleigh.Collision();
 			Santa.Collision();
-			Santa.height =Santa.height+5;
-			Santa.width = Santa.width+5;
 			Santa.isCrashing = true;
-			if(Dasher.isAlive == false) {
+		//	Santa.height =Santa.height+5;
+		//	Santa.width = Santa.width+5;
+
+			if(Santa.isCrashing == true && HasCrashed == false) {
 				Dasher.isAlive = true;
+				HasCrashed = true;
 				Dasher.xpos = Santa.xpos;
 				Dasher.ypos = Santa.ypos;
+				System.out.println("same");
 			}
 
 		}
 
 		if(Santa.rec.intersects(Sleigh.rec) == false){
+		//	System.out.println("test");
 			Santa.isCrashing = false;
 		}
 
@@ -181,7 +200,11 @@ public class BasicGameApp implements Runnable {
 		g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
 		g.drawImage(santaPic, Santa.xpos, Santa.ypos, Santa.width, Santa.height, null);
 		g.drawImage(sleighPic, Sleigh.xpos, Sleigh.ypos, Sleigh.width, Sleigh.height, null);
-		g.drawImage(dasherPic, Dasher.xpos, Dasher.ypos, Dasher.width, Dasher.height, null);
+		if(Dasher.isAlive) {
+			g.drawImage(dasherPic, Dasher.xpos, Dasher.ypos, Dasher.width, Dasher.height, null);
+			System.out.println("alive");
+		}
+		g.drawImage(sadChildPic, sadChild.xpos, sadChild.ypos, sadChild.width, sadChild.height, null);
 
 		g.dispose();
 
